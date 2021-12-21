@@ -23,6 +23,7 @@ public:
             tmp = next;
         }
         m_Head = nullptr;
+        m_Tail = nullptr;
     }
 
     inline const T *front() noexcept { return m_Head ? m_Head->data : nullptr; }
@@ -34,16 +35,41 @@ public:
     inline void enqueue(T data) noexcept
     {
         list_node_t<T> *new_node = new list_node_t<T>(data);
-        if (!m_Head && !m_Tail) m_Head = m_Tail = new_node;
-        m_Tail->next = new_node;
-        m_Tail = new_node;
+        if (!m_Head && !m_Tail) 
+            m_Head = m_Tail = new_node;
+        else
+        {
+            m_Tail->next = new_node;
+            m_Tail = new_node;
+        }
+        m_Size++;
     }
     
-    // TODO: enqueue
+    inline bool dequeue() noexcept
+    {
+        if (m_Size == 0) return false;
+        list_node_t<T> *tmp = m_Head;
+        list_node_t<T> *prev = nullptr;
+        while (tmp->next)
+        {
+            prev = tmp;
+            tmp = tmp->next;
+        }
+        delete tmp;
+        if (prev)
+        {
+            m_Tail = prev;
+            prev->next = nullptr;
+        }
+        if (m_Size == 1)
+            m_Head = nullptr;
+        m_Size--;
+        return true;
+    }
 
 private:
     list_node_t<T> *m_Head;
     list_node_t<T> *m_Tail;
-    list_node_t<T> *m_Size;
+    unsigned int m_Size;
 };
 

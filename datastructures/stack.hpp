@@ -34,6 +34,7 @@ public:
         list_node_t<T> *new_node = new list_node_t<T>(data);
         new_node->next = m_Head;
         m_Head = new_node;
+        m_Size++;
     }
 
     inline bool pop() noexcept
@@ -42,6 +43,7 @@ public:
         list_node_t<T> *tmp = m_Head;
         m_Head = m_Head->next;
         delete tmp;
+        m_Size--;
         return true;
     }
 private:
